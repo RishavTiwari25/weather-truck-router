@@ -1,0 +1,19 @@
+# One-click deploy on Render (single service: Django serves API + built React app).
+services:
+  - type: web
+    name: clearhaul
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "*"
+      - key: CORS_ALLOW_ALL_ORIGINS
+        value: "true"
+      - key: ORS_API_KEY
+        sync: false
