@@ -9,6 +9,7 @@ from .services import risk
 from .services.geocoding import geocode
 from .services.heatmap import build_heatmap
 from .services.planner import plan_trip
+from .services.weather import active_provider
 
 
 class HealthView(APIView):
@@ -19,7 +20,7 @@ class HealthView(APIView):
             {
                 "status": "ok",
                 "routing_provider": "openrouteservice" if settings.ORS_API_KEY else "osrm",
-                "weather_provider": "open-meteo",
+                "weather_provider": active_provider(),
                 "geocoders": (["openrouteservice"] if settings.ORS_API_KEY else []) + ["nominatim", "photon"],
             }
         )

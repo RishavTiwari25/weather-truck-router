@@ -83,3 +83,5 @@ export const WEATHER_CODES: Record<number, string> = {
   99: 'Thunderstorm w/ hail',
 }
 export const weatherText = (code: number) => WEATHER_CODES[code] ?? 'Unknown'
+
+export const providerName = (p: string) => (p === 'metno' ? 'MET Norway' : p === 'open-meteo' ? 'Open-Meteo' : p)

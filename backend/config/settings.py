@@ -106,14 +106,19 @@ CACHES = {
 
 # --- Third-party providers ---------------------------------------------------
 # Routing: OpenRouteService (truck profile, 3 alternatives) when a key is set,
-# otherwise the public OSRM demo server. Weather: Open-Meteo (no key needed).
+# otherwise the public OSRM demo server. Weather: Open-Meteo, MET Norway as fallback.
 ORS_API_KEY = os.getenv("ORS_API_KEY", "").strip()
 ORS_BASE_URL = os.getenv("ORS_BASE_URL", "https://api.openrouteservice.org")
 OSRM_BASE_URL = os.getenv("OSRM_BASE_URL", "https://router.project-osrm.org")
 OPEN_METEO_URL = os.getenv("OPEN_METEO_URL", "https://api.open-meteo.com/v1/forecast")
+# "auto": Open-Meteo first, MET Norway while Open-Meteo reports its quota is
+# exhausted (free quota is per outbound IP, shared on PaaS hosts). Or pin one.
+WEATHER_PROVIDER = os.getenv("WEATHER_PROVIDER", "auto").strip().lower()
+WEATHER_FALLBACK_SECONDS = int(os.getenv("WEATHER_FALLBACK_SECONDS", "1800"))
+METNO_URL = os.getenv("METNO_URL", "https://api.met.no/weatherapi/locationforecast/2.0/compact")
 NOMINATIM_URL = os.getenv("NOMINATIM_URL", "https://nominatim.openstreetmap.org")
 PHOTON_URL = os.getenv("PHOTON_URL", "https://photon.komoot.io")
-HTTP_USER_AGENT = os.getenv("HTTP_USER_AGENT", "WeatherAwareTruckRouter/1.0 (assessment project)")
+HTTP_USER_AGENT = os.getenv("HTTP_USER_AGENT", "ClearHaul/1.0 (github.com/RishavTiwari25/weather-truck-router)")
 UPSTREAM_TIMEOUT_SECONDS = float(os.getenv("UPSTREAM_TIMEOUT_SECONDS", "25"))
 WEATHER_CACHE_SECONDS = int(os.getenv("WEATHER_CACHE_SECONDS", "900"))
 GEOCODE_CACHE_SECONDS = int(os.getenv("GEOCODE_CACHE_SECONDS", "86400"))

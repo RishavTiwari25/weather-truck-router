@@ -94,6 +94,8 @@ export interface PlanRequest {
   interval_mi: IntervalMi
 }
 
+export type WeatherProvider = 'open-meteo' | 'metno'
+
 export interface PlanResponse {
   request: {
     origin: Place
@@ -104,6 +106,7 @@ export interface PlanResponse {
   }
   routes: PlannedRoute[]
   recommendation: Recommendation
+  weather_provider: WeatherProvider
   bbox: [number, number, number, number]
   corridor: LonLat[]
   timing_ms: { geocoding: number; routing: number; weather: number; total: number }

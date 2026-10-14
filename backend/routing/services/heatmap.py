@@ -11,15 +11,16 @@ import math
 import time
 
 from . import geo, risk
-from .weather import fetch_hourly
+from .weather import METNO, active_provider, fetch_hourly
 
 TARGET_CELLS = 300  # grid cells before corridor masking (~50-65% survive)
+TARGET_CELLS_FALLBACK = 220  # MET Norway is one request per cell, so coarsen
 MIN_CELL_DEG = 0.06
 MAX_CELL_DEG = 0.75
 HOURS = 48
 
 
-def build_grid(bbox: tuple[float, float, float, float]) -> dict:
+def build_grid(bbox: tuple[float, float, float, float], target_cells: int = TARGET_CELLS) -> dict:
     west, south, east, north = bbox
     width = max(east - west, 0.2)
     height = max(north - south, 0.2)
@@ -31,7 +32,7 @@ def build_grid(bbox: tuple[float, float, float, float]) -> dict:
     # Correct for longitude foreshortening so cells look square on the map.
     mean_lat = math.radians((south + north) / 2)
     width_eff = (east - west) * math.cos(mean_lat)
-    cell_lat = math.sqrt((width_eff * (north - south)) / TARGET_CELLS)
+    cell_lat = math.sqrt((width_eff * (north - south)) / target_cells)
     cell_lat = min(MAX_CELL_DEG, max(MIN_CELL_DEG, cell_lat))
     cell_lon = cell_lat / max(0.2, math.cos(mean_lat))
 
@@ -75,7 +76,8 @@ def build_heatmap(bbox: tuple[float, float, float, float], corridor: list[geo.Lo
     start = now_ts - (now_ts % 3600)  # floor to hour
     hours = [start + h * 3600 for h in range(HOURS + 1)]
 
-    grid = build_grid(bbox)
+    provider = active_provider()
+    grid = build_grid(bbox, TARGET_CELLS_FALLBACK if provider == METNO else TARGET_CELLS)
     cells = corridor_mask(grid, corridor)
     west, south = grid["bbox"][0], grid["bbox"][1]
     centres = []
@@ -127,5 +129,6 @@ def build_heatmap(bbox: tuple[float, float, float, float], corridor: list[geo.Lo
         "rain": rain,
         "snow": snow,
         "score": score,
+        "weather_provider": provider,
         "generated_at": now_ts,
     }

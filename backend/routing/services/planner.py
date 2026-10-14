@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from . import geo, recommend, sampling
 from .geocoding import geocode
 from .routing import fetch_routes
-from .weather import days_needed, fetch_hourly
+from .weather import active_provider, days_needed, fetch_hourly
 
 log = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ def plan_trip(origin_q: str, destination_q: str, departure_ts: int, load_lb: flo
     flat = [cp for cps in per_route for cp in cps]
     latest_eta = max(cp.eta for cp in flat)
     series = fetch_hourly([(cp.lat, cp.lon) for cp in flat], days=days_needed(latest_eta, int(time.time())))
+    weather_provider = active_provider()
     t_weather = time.perf_counter()
 
     cursor = 0
@@ -84,6 +85,7 @@ def plan_trip(origin_q: str, destination_q: str, departure_ts: int, load_lb: flo
         },
         "routes": route_dicts,
         "recommendation": recommendation,
+        "weather_provider": weather_provider,
         "bbox": list(geo.bbox(all_coords)),
         "corridor": [[round(lon, 4), round(lat, 4)] for lon, lat in corridor],
         "timing_ms": {

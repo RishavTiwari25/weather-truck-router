@@ -19,7 +19,7 @@ based on forecast weather, load weight and travel time.
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, MapLibre GL, Zustand, Framer Motion |
 | Backend | Django 5/6, Django REST Framework, requests, gunicorn, WhiteNoise |
 | Routing | OpenRouteService `driving-hgv` (truck profile) when `ORS_API_KEY` is set, otherwise public OSRM |
-| Weather | Open-Meteo hourly forecast (no key required) |
+| Weather | Open-Meteo hourly forecast (no key); MET Norway as automatic fallback |
 | Geocoding | OpenRouteService -> Nominatim -> Photon provider chain; raw `lat, lon` accepted |
 
 ---
@@ -226,6 +226,8 @@ docker compose up --build   # http://localhost:8000
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `ORS_API_KEY` | empty | enables OpenRouteService truck routing + geocoding |
+| `WEATHER_PROVIDER` | auto | `auto` uses Open-Meteo and switches to MET Norway while Open-Meteo reports its per-IP quota is exhausted; or pin `open-meteo` / `metno` |
+| `WEATHER_FALLBACK_SECONDS` | 1800 | how long to stay on MET Norway before retrying Open-Meteo |
 | `OSRM_TRUCK_DURATION_FACTOR` | 1.15 | scales OSRM car durations to truck speeds |
 | `WEATHER_CACHE_SECONDS` | 900 | per-point forecast cache |
 | `API_THROTTLE_RATE` | 60/min | anonymous rate limit |
@@ -247,7 +249,9 @@ backend/
       geocoding.py        provider chain + cache
       routing.py          ORS / OSRM providers, via-point alternatives
       sampling.py         checkpoints, ETAs, miles-per-level summary
-      weather.py          Open-Meteo batched client + interpolation
+      weather.py          provider front door: Open-Meteo batched client + MET Norway fallback
+      metno.py            MET Norway Locationforecast client, normalised to the same series
+      series.py           HourlySeries + interpolation at a timestamp
       risk.py             threshold table + load rules
       recommend.py        lexicographic ranking + explanations
       heatmap.py          corridor grid + 48 h frames

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import { api } from '../api/client'
+import { providerName } from '../lib/format'
 
 type Status = 'checking' | 'online' | 'offline'
 
 export function Header() {
   const [status, setStatus] = useState<Status>('checking')
   const [provider, setProvider] = useState<string>('')
+  const [weather, setWeather] = useState<string>('')
 
   useEffect(() => {
     let cancelled = false
@@ -16,6 +18,7 @@ export function Header() {
         if (cancelled) return
         setStatus('online')
         setProvider(h.routing_provider === 'osrm' ? 'OSRM' : 'OpenRouteService')
+        setWeather(providerName(h.weather_provider))
       })
       .catch(() => !cancelled && setStatus('offline'))
     return () => {
@@ -37,7 +40,7 @@ export function Header() {
       </div>
       <div
         className="ml-auto flex items-center gap-1.5 text-xs text-muted"
-        title={status === 'online' ? `Routing via ${provider}, weather via Open-Meteo` : status === 'offline' ? 'API unreachable' : 'Checking API'}
+        title={status === 'online' ? `Routing via ${provider}, weather via ${weather}` : status === 'offline' ? 'API unreachable' : 'Checking API'}
       >
         <span
           className={`h-2 w-2 rounded-full ${status === 'online' ? 'bg-risk-low' : status === 'offline' ? 'bg-risk-severe' : 'bg-line-strong'}`}

@@ -45,5 +45,5 @@ export const api = {
   heatmap: (bbox: PlanResponse['bbox'], corridor: LonLat[], signal?: AbortSignal) =>
     request<HeatmapResponse>('/api/heatmap', { method: 'POST', body: JSON.stringify({ bbox, corridor }) }, signal),
 
-  health: () => request<{ status: string; routing_provider: string }>('/api/health', { method: 'GET' }),
+  health: () => request<{ status: string; routing_provider: string; weather_provider: string }>('/api/health', { method: 'GET' }),
 }

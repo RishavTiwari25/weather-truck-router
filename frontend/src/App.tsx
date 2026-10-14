@@ -7,6 +7,7 @@ import { RecommendationCard } from './components/RecommendationCard'
 import { RouteCard } from './components/RouteCard'
 import { TimeDock } from './components/TimeDock'
 import { TripForm } from './components/TripForm'
+import { providerName } from './lib/format'
 import { useStore } from './store'
 
 export default function App() {
@@ -45,7 +46,7 @@ export default function App() {
                 <RouteCard key={r.id} route={r} selected={r.id === selectedId} fastestDuration={fastest} truckMile={truckMile} />
               ))}
               <p className="px-1 pb-2 text-[11px] leading-relaxed text-muted">
-                Forecast from Open-Meteo, read at each checkpoint's ETA. Routing from{' '}
+                Forecast from {providerName(plan.weather_provider)}, read at each checkpoint's ETA. Routing from{' '}
                 {plan.routes[0]?.provider === 'osrm' ? 'OSRM, with car durations scaled 1.15x for trucks' : 'OpenRouteService (truck profile)'}. The
                 stretch between two checkpoints takes the worse of their two ratings. Planned in {(plan.timing_ms.total / 1000).toFixed(1)} s.
               </p>
