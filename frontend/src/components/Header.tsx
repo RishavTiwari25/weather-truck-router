@@ -1,4 +1,3 @@
-import { CloudLightning } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { api } from '../api/client'
@@ -16,7 +15,7 @@ export function Header() {
       .then((h) => {
         if (cancelled) return
         setStatus('online')
-        setProvider(h.routing_provider === 'osrm' ? 'OSRM' : 'ORS truck')
+        setProvider(h.routing_provider === 'osrm' ? 'OSRM' : 'OpenRouteService')
       })
       .catch(() => !cancelled && setStatus('offline'))
     return () => {
@@ -24,25 +23,26 @@ export function Header() {
     }
   }, [])
 
-  const dot = status === 'online' ? 'bg-emerald-400' : status === 'offline' ? 'bg-red-400' : 'bg-slate-500'
-
   return (
-    <header className="flex items-center gap-3 border-b border-white/5 px-5 py-4">
-      <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 shadow-glow">
-        <CloudLightning className="h-5 w-5 text-ink-950" strokeWidth={2.4} />
-      </div>
+    <header className="flex items-center gap-3 border-b border-line bg-surface px-5 py-3.5">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden className="shrink-0">
+        <rect width="28" height="28" rx="6" fill="#1d1d1b" />
+        <path d="M6 19c3-6 6-7 9-3s5 3 7-3" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
+        <circle cx="6" cy="19" r="2" fill="#2e9e5b" />
+        <circle cx="22" cy="13" r="2" fill="#d1352b" />
+      </svg>
       <div className="min-w-0">
-        <h1 className="text-[17px] font-bold leading-tight tracking-tight text-white">ClearHaul</h1>
-        <p className="truncate text-xs text-slate-400">Weather-aware truck routing for India</p>
+        <h1 className="text-[15px] font-semibold leading-tight text-ink">ClearHaul</h1>
+        <p className="truncate text-xs text-muted">Truck routing that checks the forecast along the way</p>
       </div>
-      <div className="ml-auto flex items-center gap-1.5">
+      <div
+        className="ml-auto flex items-center gap-1.5 text-xs text-muted"
+        title={status === 'online' ? `Routing via ${provider}, weather via Open-Meteo` : status === 'offline' ? 'API unreachable' : 'Checking API'}
+      >
         <span
-          className="flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 font-mono text-[10px] text-slate-400"
-          title={status === 'online' ? `API online - routing via ${provider}, weather via Open-Meteo` : status === 'offline' ? 'API unreachable' : 'Checking API'}
-        >
-          <span className={`h-1.5 w-1.5 rounded-full ${dot} ${status === 'checking' ? 'animate-pulse' : ''}`} />
-          {status === 'online' ? provider : status === 'offline' ? 'offline' : 'api'}
-        </span>
+          className={`h-2 w-2 rounded-full ${status === 'online' ? 'bg-risk-low' : status === 'offline' ? 'bg-risk-severe' : 'bg-line-strong'}`}
+        />
+        {status === 'online' ? 'Live' : status === 'offline' ? 'Offline' : 'Connecting'}
       </div>
     </header>
   )

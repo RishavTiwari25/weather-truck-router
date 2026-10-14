@@ -2,55 +2,31 @@
 @import 'maplibre-gl/dist/maplibre-gl.css' layer(base);
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-  --color-ink-950: #070b16;
-  --color-ink-900: #0b1120;
-  --color-ink-800: #111a2e;
-  --color-ink-700: #1a2540;
-  --color-ink-600: #273553;
+  --color-paper: #f6f5f2;
+  --color-surface: #ffffff;
+  --color-line: #e3e1dc;
+  --color-line-strong: #cfccc5;
+  --color-ink: #1d1d1b;
+  --color-ink-soft: #4a4944;
+  --color-muted: #7a786f;
+  --color-accent: #1d1d1b;
+  --color-link: #1f4fd6;
 
-  --color-risk-low: #22c55e;
-  --color-risk-moderate: #eab308;
-  --color-risk-high: #f97316;
-  --color-risk-severe: #ef4444;
-  --color-risk-notravel: #d946ef;
+  --color-risk-low: #2e9e5b;
+  --color-risk-moderate: #d6a400;
+  --color-risk-high: #e2731b;
+  --color-risk-severe: #d1352b;
+  --color-risk-notravel: #8c2bb8;
 
-  --color-route-a: #60a5fa;
-  --color-route-b: #c084fc;
-  --color-route-c: #2dd4bf;
-
-  --color-accent: #38bdf8;
-  --color-accent-strong: #0ea5e9;
-
-  --shadow-glow: 0 0 0 1px rgb(56 189 248 / 0.35), 0 10px 40px -10px rgb(56 189 248 / 0.45);
-  --shadow-panel: 0 20px 60px -20px rgb(0 0 0 / 0.7);
-
-  --animate-shimmer: shimmer 1.6s linear infinite;
-  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
-
-  @keyframes shimmer {
-    from {
-      background-position: 200% 0;
-    }
-    to {
-      background-position: -200% 0;
-    }
-  }
-  @keyframes pulse-soft {
-    0%,
-    100% {
-      opacity: 0.55;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
+  --shadow-card: 0 1px 2px rgb(29 29 27 / 0.06), 0 1px 0 rgb(29 29 27 / 0.02);
+  --shadow-float: 0 4px 16px rgb(29 29 27 / 0.12), 0 1px 3px rgb(29 29 27 / 0.08);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
@@ -62,62 +38,70 @@ body,
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background:
-    radial-gradient(1200px 600px at -10% -10%, rgb(56 189 248 / 0.12), transparent 60%),
-    radial-gradient(900px 500px at 110% 110%, rgb(99 102 241 / 0.12), transparent 60%),
-    var(--color-ink-950);
-  color: #e5e9f2;
+  background: var(--color-paper);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-size: 14px;
 }
 
-/* --- Reusable surfaces (layered so utility classes can override them) --- */
 @layer components {
-.glass {
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.03));
-  border: 1px solid rgb(255 255 255 / 0.09);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  box-shadow: var(--shadow-panel);
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .float {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    box-shadow: var(--shadow-float);
+  }
+
+  .field {
+    @apply w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition placeholder:text-muted focus:border-ink;
+  }
+
+  .label {
+    @apply mb-1 block text-xs font-medium text-ink-soft;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-4 py-2.5 text-sm font-medium text-white transition hover:bg-black disabled:cursor-wait disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-2.5 py-1.5 text-xs font-medium text-ink-soft transition hover:border-line-strong hover:text-ink;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #ecebe7 25%, #f6f5f2 50%, #ecebe7 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
 }
 
-.glass-strong {
-  background: linear-gradient(180deg, rgb(17 26 46 / 0.92), rgb(11 17 32 / 0.92));
-  border: 1px solid rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  box-shadow: var(--shadow-panel);
-}
-
-.field {
-  @apply w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:bg-white/[0.07] focus:ring-2 focus:ring-sky-400/20;
-}
-
-.label {
-  @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400;
-}
-
-.chip {
-  @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-xs font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/[0.09] hover:text-white;
-}
-
-.skeleton {
-  background: linear-gradient(90deg, rgb(255 255 255 / 0.04) 25%, rgb(255 255 255 / 0.1) 50%, rgb(255 255 255 / 0.04) 75%);
-  background-size: 200% 100%;
-  animation: var(--animate-shimmer);
-}
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 /* --- Scrollbars ---------------------------------------------------------- */
 .scroll-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgb(255 255 255 / 0.15) transparent;
+  scrollbar-color: #cfccc5 transparent;
 }
 .scroll-thin::-webkit-scrollbar {
   width: 8px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: rgb(255 255 255 / 0.15);
+  background: #cfccc5;
   border-radius: 999px;
 }
 
@@ -126,57 +110,41 @@ input[type='range'].slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 6px;
+  height: 4px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.12);
+  background: #d9d7d1;
   outline: none;
 }
 input[type='range'].slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--color-accent);
-  box-shadow: 0 0 0 4px rgb(56 189 248 / 0.2);
+  background: var(--color-ink);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--color-line-strong);
   cursor: grab;
-  transition: transform 0.15s ease;
-}
-input[type='range'].slider::-webkit-slider-thumb:hover {
-  transform: scale(1.12);
 }
 input[type='range'].slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--color-accent);
+  background: var(--color-ink);
+  border: 2px solid #fff;
   cursor: grab;
 }
 
 /* --- MapLibre overrides -------------------------------------------------- */
 .maplibregl-ctrl-group {
-  background: rgb(17 26 46 / 0.9) !important;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  box-shadow: var(--shadow-panel) !important;
-  border-radius: 10px !important;
+  border: 1px solid var(--color-line) !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: 6px !important;
   overflow: hidden;
 }
-.maplibregl-ctrl-group button + button {
-  border-top: 1px solid rgb(255 255 255 / 0.08) !important;
-}
-.maplibregl-ctrl button .maplibregl-ctrl-icon {
-  filter: invert(1) opacity(0.85);
-}
 .maplibregl-ctrl-attrib {
-  background: rgb(7 11 22 / 0.7) !important;
-  color: #94a3b8 !important;
+  background: rgb(255 255 255 / 0.8) !important;
   font-size: 10px !important;
-  border-radius: 8px 0 0 0;
-}
-.maplibregl-ctrl-attrib a {
-  color: #cbd5e1 !important;
 }
 .maplibregl-popup-content {
   background: transparent !important;
@@ -190,26 +158,24 @@ input[type='range'].slider::-moz-range-thumb {
 .marker-pin {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  color: #0b1120;
-  font-weight: 800;
-  font-size: 12px;
-  border: 3px solid #fff;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+  color: #fff;
+  font-weight: 600;
+  font-size: 11px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
 }
 
 .truck-marker {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #fff;
-  color: #0b1120;
-  box-shadow:
-    0 0 0 6px rgb(255 255 255 / 0.18),
-    0 10px 24px rgb(0 0 0 / 0.5);
-  animation: var(--animate-pulse-soft);
+  background: var(--color-ink);
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.35);
 }

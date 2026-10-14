@@ -19,7 +19,6 @@ export default defineConfig({
       output: {
         manualChunks(id: string) {
           if (id.includes('maplibre-gl')) return 'maplibre'
-          if (id.includes('framer-motion')) return 'motion'
           return undefined
         },
       },

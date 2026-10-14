@@ -8,35 +8,36 @@ export const SNOW_BOUNDS = [0.5, 1.0, 2.0, 3.0] as const
 export const LEVEL_LABELS = ['Low', 'Moderate', 'High', 'Severe', 'No Travel'] as const
 
 export const LEVEL_COLORS: Record<RiskLevel, string> = {
-  0: '#22c55e',
-  1: '#eab308',
-  2: '#f97316',
-  3: '#ef4444',
-  4: '#d946ef',
+  0: '#2e9e5b',
+  1: '#d6a400',
+  2: '#e2731b',
+  3: '#d1352b',
+  4: '#8c2bb8',
 }
 
 export const LEVEL_TEXT: Record<RiskLevel, string> = {
-  0: 'text-emerald-400',
-  1: 'text-yellow-400',
-  2: 'text-orange-400',
-  3: 'text-red-400',
-  4: 'text-fuchsia-400',
+  0: 'text-[#2e9e5b]',
+  1: 'text-[#a67f00]',
+  2: 'text-[#c25f0f]',
+  3: 'text-[#b52a21]',
+  4: 'text-[#7a1fa3]',
 }
 
+/** Tinted chip styles per level (light theme). */
 export const LEVEL_BG: Record<RiskLevel, string> = {
-  0: 'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
-  1: 'bg-yellow-500/15 text-yellow-300 ring-yellow-400/30',
-  2: 'bg-orange-500/15 text-orange-300 ring-orange-400/30',
-  3: 'bg-red-500/15 text-red-300 ring-red-400/30',
-  4: 'bg-fuchsia-500/15 text-fuchsia-300 ring-fuchsia-400/30',
+  0: 'bg-[#e8f5ec] text-[#22703f] ring-[#bfe3cb]',
+  1: 'bg-[#fbf3d6] text-[#7a5e00] ring-[#efdc8f]',
+  2: 'bg-[#fdeadb] text-[#9a4a0a] ring-[#f4c6a0]',
+  3: 'bg-[#fbe2df] text-[#9a251d] ring-[#f1b1ab]',
+  4: 'bg-[#f1e3f7] text-[#6a1890] ring-[#d9b6e8]',
 }
 
 export const ROUTE_COLORS: Record<string, string> = {
-  A: '#60a5fa',
-  B: '#c084fc',
-  C: '#2dd4bf',
+  A: '#1f4fd6',
+  B: '#7a3fb8',
+  C: '#0e8a7a',
 }
-export const routeColor = (id: string) => ROUTE_COLORS[id] ?? '#94a3b8'
+export const routeColor = (id: string) => ROUTE_COLORS[id] ?? '#6b6b66'
 
 /** Piecewise-linear 0..4.5 score, identical to the backend implementation. */
 export function continuousScore(value: number, bounds: readonly number[]): number {
@@ -69,13 +70,13 @@ export function variableScore(variable: HeatVariable, value: number): number {
  * basemap stays legible; the ramp passes through the five level colours.
  */
 const STOPS: [number, [number, number, number], number][] = [
-  [0.0, [16, 185, 129], 0.1],
-  [0.5, [34, 197, 94], 0.3],
-  [1.0, [234, 179, 8], 0.5],
-  [2.0, [249, 115, 22], 0.66],
-  [3.0, [239, 68, 68], 0.8],
-  [4.0, [217, 70, 239], 0.9],
-  [4.5, [168, 85, 247], 0.95],
+  [0.0, [46, 158, 91], 0.08],
+  [0.5, [46, 158, 91], 0.28],
+  [1.0, [214, 164, 0], 0.5],
+  [2.0, [226, 115, 27], 0.66],
+  [3.0, [209, 53, 43], 0.8],
+  [4.0, [140, 43, 184], 0.88],
+  [4.5, [110, 30, 150], 0.92],
 ]
 
 export function scoreToRGBA(score: number): [number, number, number, number] {

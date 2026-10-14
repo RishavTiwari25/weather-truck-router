@@ -27,7 +27,7 @@ import { CheckpointPopup } from './CheckpointPopup'
 
 setWorkerUrl(maplibreWorkerUrl)
 
-const STYLE_URL = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+const STYLE_URL = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
 const SRC = { routes: 'routes', risk: 'risk-segments', cps: 'checkpoints', heat: 'heat' } as const
 const LYR = {
   heat: 'heat-layer',
@@ -117,9 +117,9 @@ export function MapView({ onTruckMile }: { onTruckMile: (mile: number | null) =>
           source: SRC.routes,
           layout: { 'line-cap': 'round', 'line-join': 'round' },
           paint: {
-            'line-color': '#0b1120',
-            'line-width': ['case', ['get', 'selected'], 11, 7],
-            'line-opacity': ['case', ['get', 'selected'], 0.9, 0.5],
+            'line-color': '#ffffff',
+            'line-width': ['case', ['get', 'selected'], 10, 6],
+            'line-opacity': ['case', ['get', 'selected'], 0.95, 0.7],
           },
         },
         firstSymbol,
@@ -132,8 +132,8 @@ export function MapView({ onTruckMile }: { onTruckMile: (mile: number | null) =>
           layout: { 'line-cap': 'round', 'line-join': 'round' },
           paint: {
             'line-color': ['get', 'color'],
-            'line-width': ['case', ['get', 'selected'], 7, ['get', 'hovered'], 5, 3.5],
-            'line-opacity': ['case', ['get', 'selected'], 1, ['get', 'hovered'], 0.9, 0.55],
+            'line-width': ['case', ['get', 'selected'], 6, ['get', 'hovered'], 4.5, 3],
+            'line-opacity': ['case', ['get', 'selected'], 1, ['get', 'hovered'], 0.95, 0.6],
           },
         },
         firstSymbol,
@@ -155,7 +155,7 @@ export function MapView({ onTruckMile }: { onTruckMile: (mile: number | null) =>
         paint: {
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 7, 8, 11, 12, 16],
           'circle-color': ['get', 'color'],
-          'circle-opacity': ['case', ['get', 'selected'], 0.25, 0.08],
+          'circle-opacity': ['case', ['get', 'selected'], 0.2, 0.06],
           'circle-blur': 0.4,
         },
       })
@@ -285,8 +285,8 @@ export function MapView({ onTruckMile }: { onTruckMile: (mile: number | null) =>
     const o = plan.request.origin
     const d = plan.request.destination
     markersRef.current.push(
-      new Marker({ element: pinElement('S', '#22c55e') }).setLngLat([o.lon, o.lat]).addTo(map),
-      new Marker({ element: pinElement('E', '#fb7185') }).setLngLat([d.lon, d.lat]).addTo(map),
+      new Marker({ element: pinElement('S', '#1d1d1b') }).setLngLat([o.lon, o.lat]).addTo(map),
+      new Marker({ element: pinElement('E', '#d1352b') }).setLngLat([d.lon, d.lat]).addTo(map),
     )
   }, [plan, ready, selectedId, hoveredId, showAllRoutes, showCheckpoints, indexes])
 
