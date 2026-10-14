@@ -95,8 +95,8 @@ export function MapView({ onTruckMile }: { onTruckMile: (mile: number | null) =>
     const map = new MapLibreMap({
       container: containerRef.current,
       style: STYLE_URL,
-      center: [-96, 39],
-      zoom: 3.6,
+      center: [79.5, 22.5],
+      zoom: 4.1,
       attributionControl: { compact: true },
       maxPitch: 0,
     })

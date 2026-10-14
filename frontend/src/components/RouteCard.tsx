@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
-import { ChevronDown, Clock, Flag, Gauge, GitFork, Ruler, Star, Zap } from 'lucide-react'
+import { AlertTriangle, ChevronDown, Clock, Flag, Gauge, GitFork, Ruler, Star, Zap } from 'lucide-react'
 import { useState } from 'react'
 
 import type { PlannedRoute, RiskLevel } from '../api/types'
-import { fmtDay, fmtDayTime, fmtDuration, fmtDurationDelta, fmtMiles, fmtTime } from '../lib/format'
+import { fmtDay, fmtDayTime, fmtDuration, fmtDurationDelta, fmtKm, fmtMiles, fmtTime } from '../lib/format'
 import { LEVEL_BG, LEVEL_COLORS, LEVEL_LABELS, routeColor } from '../lib/risk'
 import { useStore } from '../store'
 import { RiskRibbon } from './RiskRibbon'
@@ -25,6 +25,7 @@ export function RouteCard({ route, selected, fastestDuration, truckMile }: Props
   const s = route.summary
   const isFastest = route.duration_s === fastestDuration
   const delta = route.duration_s - fastestDuration
+  const worst = route.checkpoints[s.worst_checkpoint_index] ?? route.checkpoints[0]
 
   return (
     <motion.article
@@ -34,8 +35,8 @@ export function RouteCard({ route, selected, fastestDuration, truckMile }: Props
       transition={{ duration: 0.3, delay: 0.05 * (route.id.charCodeAt(0) - 65) }}
       onMouseEnter={() => hoverRoute(route.id)}
       onMouseLeave={() => hoverRoute(null)}
-      className={`glass cursor-pointer rounded-2xl p-4 transition ${
-        selected ? 'ring-2 ring-sky-400/60 shadow-glow' : 'hover:border-white/20'
+      className={`glass cursor-pointer rounded-2xl p-4 transition-all duration-200 ${
+        selected ? 'ring-2 ring-sky-400/60 shadow-glow' : 'hover:-translate-y-0.5 hover:border-white/20'
       }`}
       onClick={() => selectRoute(route.id)}
       aria-selected={selected}
@@ -86,7 +87,7 @@ export function RouteCard({ route, selected, fastestDuration, truckMile }: Props
       </div>
 
       <dl className="mt-3 grid grid-cols-4 gap-2">
-        <Stat icon={Ruler} label="Distance" value={fmtMiles(route.distance_mi)} />
+        <Stat icon={Ruler} label="Distance" value={fmtMiles(route.distance_mi)} sub={fmtKm(route.distance_mi)} />
         <Stat icon={Clock} label="Drive" value={fmtDuration(route.duration_s)} sub={isFastest ? undefined : fmtDurationDelta(delta)} />
         <Stat icon={Flag} label="Arrive" value={fmtTime(route.eta)} sub={fmtDay(route.eta)} />
         <Stat icon={Gauge} label="Avg risk" value={s.avg_risk.toFixed(2)} sub="/ 4" />
@@ -105,6 +106,26 @@ export function RouteCard({ route, selected, fastestDuration, truckMile }: Props
           ) : null,
         )}
       </div>
+
+      {worst.risk.level >= 1 && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            selectRoute(route.id)
+            setActive({ routeId: route.id, index: worst.index, pinned: true, focus: true })
+          }}
+          className="mt-3 flex w-full items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] transition hover:brightness-125"
+          style={{ borderColor: `${LEVEL_COLORS[worst.risk.level]}55`, background: `${LEVEL_COLORS[worst.risk.level]}14` }}
+          title="Show the worst checkpoint on the map"
+        >
+          <AlertTriangle className="h-3.5 w-3.5 shrink-0" style={{ color: LEVEL_COLORS[worst.risk.level] }} />
+          <span className="min-w-0 flex-1 truncate text-slate-200">
+            <b style={{ color: LEVEL_COLORS[worst.risk.level] }}>{worst.risk.label}</b> at mile {worst.mile.toFixed(0)} &middot; {fmtDayTime(worst.eta)}{' '}
+            &middot; {worst.risk.drivers[0]}
+          </span>
+        </button>
+      )}
 
       <button
         type="button"
@@ -185,8 +206,9 @@ function Stat({
       <dt className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-slate-500">
         <Icon className="h-3 w-3" /> {label}
       </dt>
-      <dd className="mt-0.5 truncate text-[13px] font-semibold text-slate-100">
-        {value} {sub && <span className="text-[10px] font-medium text-slate-500">{sub}</span>}
+      <dd className="mt-0.5 text-[13px] font-semibold leading-tight text-slate-100">
+        <span className="block truncate">{value}</span>
+        {sub && <span className="block truncate text-[10px] font-medium text-slate-500">{sub}</span>}
       </dd>
     </div>
   )

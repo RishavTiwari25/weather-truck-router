@@ -13,7 +13,7 @@ with a planned trip *before* recording so the first frame is already impressive.
 
 ## 0:30 - Input (45 s)
 
-- Click **Chicago -> Denver** sample chip. Point out: origin/destination accept
+- Click **New Delhi -> Mumbai** sample chip. Point out: origin/destination accept
   city names, addresses or raw lat/lon; departure defaults to the next hour;
   load slider with presets; the two load rules light up as the slider crosses
   30,000 and 40,000 lb.
@@ -73,10 +73,11 @@ with a planned trip *before* recording so the first frame is already impressive.
 
 ## Demo trips that usually show interesting weather
 
-- Chicago, IL -> Denver, CO (plains wind)
-- Seattle, WA -> Salt Lake City, UT (mountain passes, snow in season)
-- Dallas, TX -> Atlanta, GA (convective rain)
-- Minneapolis, MN -> Kansas City, MO
+- New Delhi -> Mumbai (NH48 corridor, pre-monsoon dust storms, monsoon rain)
+- Bengaluru -> Hyderabad (Deccan thunderstorms)
+- Chennai -> Kolkata (east-coast cyclone season, Oct-Dec)
+- Ahmedabad -> Pune (Western Ghats rain)
+- Jaipur -> Lucknow (winter fog, summer loo winds)
 
 Tip: set the load to **Max (80,000 lb)** to make the load rules bite on windy
 days, and switch to **every 10 mi** sampling to show checkpoint density.

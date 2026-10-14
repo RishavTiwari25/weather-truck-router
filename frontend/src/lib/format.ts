@@ -31,6 +31,8 @@ export const fmtMiles = (mi: number, digits = 0) =>
   `${mi.toLocaleString(undefined, { maximumFractionDigits: digits })} mi`
 
 export const fmtLb = (lb: number) => `${lb.toLocaleString()} lb`
+export const fmtKm = (mi: number) => `${Math.round(mi * 1.609344).toLocaleString()} km`
+export const fmtTonnes = (lb: number) => `${(lb * 0.000453592).toFixed(1)} t`
 
 export const fmtRelHours = (h: number) => (h === 0 ? 'Now' : `+${Math.round(h)}h`)
 

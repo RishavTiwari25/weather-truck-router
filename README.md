@@ -193,8 +193,8 @@ Example:
 
 ```bash
 curl -X POST http://localhost:8000/api/plan -H "Content-Type: application/json" -d '{
-  "origin": "Chicago, IL", "destination": "Denver, CO",
-  "departure": "2026-10-16T08:00:00-05:00", "load_lb": 42000, "interval_mi": 25 }'
+  "origin": "New Delhi, India", "destination": "Mumbai, India",
+  "departure": "2026-10-16T06:00:00+05:30", "load_lb": 42000, "interval_mi": 25 }'
 ```
 
 ---

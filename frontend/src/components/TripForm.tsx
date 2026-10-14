@@ -5,10 +5,11 @@ import { fmtLb } from '../lib/format'
 import { useStore } from '../store'
 
 const SAMPLE_TRIPS: [string, string][] = [
-  ['Chicago, IL', 'Denver, CO'],
-  ['Dallas, TX', 'Atlanta, GA'],
-  ['Seattle, WA', 'Salt Lake City, UT'],
-  ['Minneapolis, MN', 'Kansas City, MO'],
+  ['New Delhi, India', 'Mumbai, India'],
+  ['Bengaluru, India', 'Hyderabad, India'],
+  ['Chennai, India', 'Kolkata, India'],
+  ['Ahmedabad, India', 'Pune, India'],
+  ['Jaipur, India', 'Lucknow, India'],
 ]
 
 const LOAD_PRESETS = [
@@ -61,7 +62,7 @@ export function TripForm() {
             <input
               id="origin"
               className="field pl-9"
-              placeholder="City, address or lat, lon"
+              placeholder="City, address or lat, lon (e.g. Delhi)"
               value={form.origin}
               onChange={(e) => setForm({ origin: e.target.value })}
               required
@@ -87,7 +88,7 @@ export function TripForm() {
             <input
               id="destination"
               className="field pl-9"
-              placeholder="City, address or lat, lon"
+              placeholder="City, address or lat, lon (e.g. Delhi)"
               value={form.destination}
               onChange={(e) => setForm({ destination: e.target.value })}
               required

@@ -66,8 +66,8 @@ let heatAbort: AbortController | null = null
 
 export const useStore = create<State>((set, get) => ({
   form: {
-    origin: 'Chicago, IL',
-    destination: 'Denver, CO',
+    origin: 'New Delhi, India',
+    destination: 'Mumbai, India',
     departureLocal: defaultDeparture(),
     loadLb: 42000,
     intervalMi: 25,
