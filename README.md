@@ -204,8 +204,12 @@ curl -X POST http://localhost:8000/api/plan -H "Content-Type: application/json" 
 ### Option A - single service (simplest): Render / Fly / Railway / any Docker host
 
 The `Dockerfile` builds the React app and serves it from Django via WhiteNoise.
-`render.yaml` is a one-click blueprint for Render. Set `DJANGO_SECRET_KEY`
-and, optionally, `ORS_API_KEY`. Health check: `/api/health`.
+`render.yaml` is a one-click blueprint for Render: it generates
+`DJANGO_SECRET_KEY`, sets debug off, and asks for an optional `ORS_API_KEY`.
+Health check: `/api/health`. The free tier sleeps after 15 min idle; the first
+request after that takes ~30 s.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/RishavTiwari25/weather-truck-router)
 
 ```bash
 docker compose up --build   # http://localhost:8000
