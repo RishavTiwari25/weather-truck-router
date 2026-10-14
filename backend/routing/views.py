@@ -21,7 +21,7 @@ class HealthView(APIView):
                 "status": "ok",
                 "routing_provider": "openrouteservice" if settings.ORS_API_KEY else "osrm",
                 "weather_provider": active_provider(),
-                "geocoders": (["openrouteservice"] if settings.ORS_API_KEY else []) + ["nominatim", "photon"],
+                "geocoders": (["openrouteservice"] if settings.ORS_API_KEY else []) + ["photon", "nominatim"],
             }
         )
 

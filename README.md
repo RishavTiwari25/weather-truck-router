@@ -20,7 +20,7 @@ based on forecast weather, load weight and travel time.
 | Backend | Django 5/6, Django REST Framework, requests, gunicorn, WhiteNoise |
 | Routing | OpenRouteService `driving-hgv` (truck profile) when `ORS_API_KEY` is set, otherwise public OSRM |
 | Weather | Open-Meteo hourly forecast (no key); MET Norway as automatic fallback |
-| Geocoding | OpenRouteService -> Nominatim -> Photon provider chain; raw `lat, lon` accepted |
+| Geocoding | OpenRouteService -> Photon -> Nominatim provider chain; raw `lat, lon` accepted |
 
 ---
 

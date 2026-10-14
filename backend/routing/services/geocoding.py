@@ -1,9 +1,12 @@
 """
-Geocoding with a provider chain: OpenRouteService (if key) -> Nominatim -> Photon.
-Raw "lat, lon" input is accepted directly. Results are cached for a day.
+Geocoding with a provider chain: OpenRouteService (if key) -> Photon -> Nominatim.
+Photon goes first because Nominatim enforces one request per second per IP,
+which a shared PaaS egress IP exhausts constantly. Raw "lat, lon" input is
+accepted directly. Results are cached for a day.
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
 from dataclasses import dataclass
@@ -79,7 +82,7 @@ def _photon(query: str) -> Place | None:
     return Place(query, label or query, lat, lon, "photon")
 
 
-PROVIDERS = (_ors, _nominatim, _photon)
+PROVIDERS = (_ors, _photon, _nominatim)
 
 
 def geocode(query: str) -> Place:
@@ -94,7 +97,7 @@ def geocode(query: str) -> Place:
             raise GeocodingError(f"Coordinates out of range: {query}")
         return Place(query, f"{lat:.4f}, {lon:.4f}", lat, lon, "coordinates")
 
-    key = f"geo:{query.lower()}"
+    key = "geo:" + hashlib.sha1(query.lower().encode()).hexdigest()
     cached = cache.get(key)
     if cached:
         return cached
